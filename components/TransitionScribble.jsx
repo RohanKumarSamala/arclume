@@ -6,6 +6,7 @@ import { ANIMATION_CONFIG } from '@/lib/data';
 
 export default function TransitionScribble() {
     useEffect(() => {
+        const logoTruusClickable = document.querySelector('.logo-truus');
         const transitionScribblePath = document.querySelector('.transition-scribble path');
         const transitionScribbleSvg = document.querySelector('.transition-scribble');
 
@@ -16,101 +17,131 @@ export default function TransitionScribble() {
             'var(--color-lightgreen)', 'var(--color-orange)', 'var(--color-maroon)', 'var(--color-pink)'
         ];
 
-        const config = ANIMATION_CONFIG.transitionScribble || {};
-        const durIn = config.durationIn || 0.7;
-        const durOut = config.durationOut || 1.1;
+        const runScribbleAnimation = (targetHref = null) => {
+            if (gsap.isTweening(transitionScribblePath) || gsap.isTweening(transitionScribbleSvg) || document.body.classList.contains('is-transitioning')) return;
 
-        const pathLength = transitionScribblePath.getTotalLength();
-        const l = pathLength + 5;
+            const config = ANIMATION_CONFIG.transitionScribble || {};
+            const durIn = config.durationIn || 0.8;
+            const durOut = config.durationOut || 1.6;
 
-        // Check if we are mounted right after a page transition
-        const isPending = typeof window !== 'undefined' && sessionStorage.getItem('scribble_pending') === '1';
-        const savedColor = typeof window !== 'undefined' ? sessionStorage.getItem('scribble_color') : null;
+            gsap.set(transitionScribbleSvg, { scale: config.scale || 0.7 });
 
-        if (isPending) {
-            sessionStorage.removeItem('scribble_pending');
-            const currentColor = savedColor || transitionColors[Math.floor(Math.random() * transitionColors.length)];
-            transitionScribbleSvg.style.color = currentColor;
-
-            // Start ALREADY COVERED (no page flash!)
-            gsap.set(transitionScribbleSvg, { scale: config.scale || 0.7, opacity: 1, x: 0, y: 0, rotation: 0 });
-            gsap.set(transitionScribblePath, {
-                strokeDasharray: l,
-                strokeDashoffset: 0,
-                strokeWidth: config.strokeWidthMax || '31%',
-                opacity: 1
-            });
-
-            document.body.classList.add('is-transitioning');
-
-            // Play OUT phase immediately to reveal newly loaded page
-            const drawOutTl = gsap.timeline({
-                onComplete: () => {
-                    document.body.classList.remove('is-transitioning');
-                    gsap.set(transitionScribblePath, { strokeWidth: '0%' });
-                }
-            });
-
-            drawOutTl.to(transitionScribblePath, { strokeDashoffset: -l, duration: durOut, ease: 'power2.inOut' }, 0);
-            drawOutTl.to(transitionScribblePath, { strokeWidth: config.strokeWidthStart || '8%', duration: durOut, ease: 'power2.inOut' }, 0);
-        }
-
-        // Trigger transition before navigating
-        const startTransitionTo = (targetHref) => {
-            if (gsap.isTweening(transitionScribblePath) || document.body.classList.contains('is-transitioning')) return;
+            const pathLength = transitionScribblePath.getTotalLength();
+            // Buffer to ensure thick stroke ends travel completely off screen without getting cut off
+            const l = Math.ceil(pathLength + 4000);
 
             const randomColor = transitionColors[Math.floor(Math.random() * transitionColors.length)];
             transitionScribbleSvg.style.color = randomColor;
-            sessionStorage.setItem('scribble_color', randomColor);
-            sessionStorage.setItem('scribble_pending', '1');
 
-            gsap.set(transitionScribbleSvg, { scale: config.scale || 0.7 });
+            const lightColors = ['var(--color-lightblue)', 'var(--color-lightgreen)', 'var(--color-pink)'];
+            const logoColor = lightColors.includes(randomColor) ? '#000' : '#fff';
+
+            let transitionLogo = document.querySelector('.transition-logo');
+            if (!transitionLogo) {
+                transitionLogo = document.createElement('div');
+                transitionLogo.className = 'transition-logo';
+                transitionLogo.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:10000; pointer-events:none; opacity:0; display:flex; justify-content:center; align-items:center; transition: color 0.1s;';
+                const logoEl = document.querySelector('.logo-truus');
+                if (logoEl) {
+                    const svgClone = logoEl.cloneNode(true);
+                    svgClone.style.width = '160px';
+                    svgClone.style.height = 'auto';
+                    transitionLogo.appendChild(svgClone);
+                }
+                document.body.appendChild(transitionLogo);
+            }
+
+            if (transitionLogo) transitionLogo.style.color = logoColor;
+
             gsap.set(transitionScribblePath, {
-                strokeDasharray: l,
+                strokeDasharray: `${l} ${l}`,
                 strokeDashoffset: l,
                 strokeWidth: config.strokeWidthStart || '8%',
                 opacity: 1
             });
             gsap.set(transitionScribbleSvg, { opacity: 1, x: 0, y: 0, rotation: 0 });
+            if (transitionLogo) gsap.set(transitionLogo, { opacity: 0, scale: 1 });
 
             document.body.classList.add('is-transitioning');
             const cursorBubble = document.querySelector('.cursor-bubble');
-            if (cursorBubble) gsap.to(cursorBubble, { opacity: 0, duration: 0.15 });
+            if (cursorBubble) gsap.to(cursorBubble, { opacity: 0, duration: 0.2 });
 
-            const drawInTl = gsap.timeline({
+            const drawTl = gsap.timeline({
                 onComplete: () => {
-                    window.location.href = targetHref;
+                    document.body.classList.remove('is-transitioning');
+                    gsap.set(transitionScribblePath, { strokeWidth: '0%', opacity: 0 });
+                    if (transitionLogo) gsap.set(transitionLogo, { opacity: 0 });
                 }
             });
 
-            drawInTl.to(transitionScribblePath, { strokeDashoffset: 0, duration: durIn * 0.6, ease: 'power1.inOut' }, 0);
-            drawInTl.to(transitionScribblePath, { strokeWidth: config.strokeWidthMax || '31%', duration: durIn * 0.6, ease: 'power2.inOut' }, 0);
+            // 1. Scribble draws IN (covers the viewport completely)
+            drawTl.to(transitionScribblePath, { strokeDashoffset: 0, duration: durIn, ease: 'power1.inOut' }, 0);
+            drawTl.to(transitionScribblePath, { strokeWidth: config.strokeWidthMax || '31%', duration: durIn, ease: 'power2.inOut' }, 0);
+
+            // 2. Centered ARCLUME logo appears and wiggles during mid-transition
+            if (transitionLogo && transitionLogo.firstElementChild) {
+                drawTl.set(transitionLogo, { autoAlpha: 0 }, 0);
+                drawTl.to(transitionLogo, {
+                    autoAlpha: 1,
+                    duration: durIn * 0.4,
+                    ease: 'power2.out',
+                    onStart: () => {
+                        gsap.to(transitionLogo.firstElementChild, { rotation: 5, duration: 0.15, repeat: -1, yoyo: true, ease: 'steps(1)', overwrite: 'auto' });
+                    }
+                }, durIn * 0.3);
+
+                // Fade out logo smoothly before scribble finishes exit
+                drawTl.to(transitionLogo, {
+                    autoAlpha: 0,
+                    duration: durOut * 0.4,
+                    ease: 'power2.in',
+                    onComplete: () => {
+                        gsap.killTweensOf(transitionLogo.firstElementChild);
+                        gsap.set(transitionLogo.firstElementChild, { rotation: 0 });
+                    }
+                }, durIn + (durOut * 0.3));
+            }
+
+            // 3. Execute navigation or page scroll when screen is 100% covered
+            drawTl.call(() => {
+                if (targetHref && targetHref !== window.location.pathname) {
+                    window.location.href = targetHref;
+                } else {
+                    const lenis = window.__lenis;
+                    if (lenis) lenis.scrollTo(0, { immediate: true });
+                    else window.scrollTo(0, 0);
+                }
+            }, null, durIn);
+
+            // 4. Scribble draws OUT completely past the screen, tapering to 0 width smoothly
+            drawTl.to(transitionScribblePath, { strokeDashoffset: -l, duration: durOut, ease: 'power2.inOut' }, durIn);
+            drawTl.to(transitionScribblePath, { strokeWidth: '0%', duration: durOut, ease: 'power2.in' }, durIn);
         };
 
-        // Attach click interceptor to all transition links
-        const handleLinkClick = (e) => {
+        // Attach listener to logo and navigation links
+        const handleNavClick = (e) => {
             const anchor = e.currentTarget || e.target.closest('a');
             if (!anchor) return;
-
             const href = anchor.getAttribute('href');
             if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
 
-            // Prevent transition if already on that exact path
-            if (href === window.location.pathname) return;
-
             e.preventDefault();
             e.stopPropagation();
-            startTransitionTo(href);
+            runScribbleAnimation(href);
         };
 
-        // Bind to navbar elements and work buttons
-        const selectors = ['.logo-truus', '.logo-work-container', '.nav-work-btn', '.nav-work-item', '.transition-link'];
-        const elements = document.querySelectorAll(selectors.join(','));
+        const navElements = document.querySelectorAll('.logo-truus, .logo-work-container, .nav-work-btn, .nav-work-item');
+        navElements.forEach(el => el.addEventListener('click', handleNavClick));
 
-        elements.forEach((el) => el.addEventListener('click', handleLinkClick));
+        if (logoTruusClickable) {
+            logoTruusClickable.addEventListener('click', (e) => {
+                e.preventDefault();
+                runScribbleAnimation(null);
+            });
+        }
 
         return () => {
-            elements.forEach((el) => el.removeEventListener('click', handleLinkClick));
+            navElements.forEach(el => el.removeEventListener('click', handleNavClick));
         };
     }, []);
 
