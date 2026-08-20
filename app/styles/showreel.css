@@ -1,0 +1,177 @@
+/* ─── Showreel Section ───────────────────────────────────────────────────── */
+.showreel-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--color-black-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.showreel__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 24px;
+}
+
+.showreel__kicker-wrap {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 3.5rem;
+}
+
+.showreel__kicker {
+    margin: 0;
+    line-height: 1;
+}
+
+.showreel__kicker-bold {
+    display: block;
+    font-family: 'Epilogue', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.25rem, 5.5vw, 4rem);
+    letter-spacing: -2px;
+    color: var(--color-white);
+}
+
+.showreel__kicker-italic {
+    display: block;
+    font-family: 'Times New Roman', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    letter-spacing: -1px;
+    color: var(--color-white);
+    margin-top: 0.1em;
+}
+
+.showreel-sticker--kicker {
+    position: absolute;
+    top: -1.4em;
+    right: -3.2em;
+    width: 130px;
+    rotate: -12deg;
+}
+
+.showreel__stats {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+/* ─── Stat cards ──────────────────────────────────────────────────────────── */
+.showreel-stat {
+    position: relative;
+    padding: 2.5rem 3rem;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    translate: 0 0;
+    scale: 1;
+    transition: rotate 0.3s cubic-bezier(0.4, 0, 0.2, 1), translate 0.3s cubic-bezier(0.4, 0, 0.2, 1), scale 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+}
+
+.showreel-stat__sticker {
+    position: absolute;
+    top: -22px;
+    right: -18px;
+    width: 56px;
+    rotate: 14deg;
+    z-index: 3;
+}
+
+.showreel-stat:hover {
+    rotate: 0deg;
+    translate: 0 -6px;
+    scale: 1.03;
+}
+
+.showreel-stat--green {
+    background-color: var(--color-green);
+    color: var(--color-white);
+    rotate: -3deg;
+}
+
+.showreel-stat--lightblue {
+    background-color: var(--color-lightblue);
+    color: var(--color-dark);
+    rotate: 2deg;
+    translate: 0 10px;
+}
+
+.showreel-stat--pink {
+    background-color: var(--color-pink);
+    color: var(--color-dark);
+    rotate: -2deg;
+}
+
+.showreel-stat__number {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    font-family: 'Epilogue', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.75rem, 6vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: -2px;
+    color: currentColor;
+}
+
+.showreel-stat__suffix {
+    color: currentColor;
+    opacity: 0.55;
+    font-size: 0.5em;
+    margin-left: 0.15em;
+}
+
+.showreel-stat__label {
+    margin-top: 0.75rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: currentColor;
+    opacity: 0.75;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* ─── Scattered stickers ─────────────────────────────────────────────────── */
+.showreel-sticker {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.showreel-sticker--camera {
+    top: 10%;
+    left: 8%;
+    width: 90px;
+    rotate: -12deg;
+}
+
+.showreel-sticker--smiley {
+    top: 14%;
+    right: 10%;
+    width: 80px;
+    rotate: 10deg;
+}
+
+.showreel-sticker--heart {
+    bottom: 12%;
+    right: 12%;
+    width: 85px;
+    rotate: -8deg;
+}
+
+.showreel-sticker--phone {
+    bottom: 15%;
+    left: 11%;
+    width: 70px;
+    rotate: 14deg;
+}
