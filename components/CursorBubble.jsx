@@ -20,7 +20,7 @@ export default function CursorBubble() {
         };
 
         const onMouseOver = (e) => {
-            const targetSelector = '.footer-column h3, .footer-map-link span, .footer-email, .footer-whatsapp, .single-social, .logo-truus, .nav-work-btn';
+            const targetSelector = '.footer-column h3, .footer-email, .logo-truus, .nav-work-btn';
             const found = e.target.closest(targetSelector);
 
             if (found && !isHoveringClickable) {

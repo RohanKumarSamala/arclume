@@ -32,7 +32,6 @@
     }
 
     .footer-column h3,
-    .footer-column address,
     .footer-email {
         font-size: 1.5rem;
     }
@@ -242,20 +241,15 @@
         letter-spacing: -0.5px;
     }
 
-    .footer-column address {
-        font-size: 1.25rem;
-    }
-
     .footer-email {
         font-size: 1.3rem;
     }
 
-    .footer-whatsapp {
-        font-size: 1.1rem;
-        margin-top: -6px;
+    .footer-wa-qr {
+        width: 108px;
     }
 
-    .footer-map-link {
+    .footer-wa-label {
         font-size: 0.95rem;
     }
 

@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { SOCIAL_ICONS, WIGGLE_CONFIG } from '@/lib/data';
+import { WIGGLE_CONFIG } from '@/lib/data';
 
 function initWiggle(element, intensity) {
     const target = element.querySelector('[data-wiggle-target]') || element;
@@ -19,20 +19,6 @@ function initWiggle(element, intensity) {
 export default function Footer() {
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
-
-        // ─── Map link underline draw/undraw ───
-        const footerMapLink = document.querySelector('.footer-map-link');
-        if (footerMapLink) {
-            const mapSvgPaths = footerMapLink.querySelectorAll('.draw-btn__svg path');
-            mapSvgPaths.forEach(path => {
-                const length = path.getTotalLength();
-                gsap.set(path, { strokeDasharray: length, strokeDashoffset: 0 });
-            });
-            const onEnter = () => gsap.fromTo(mapSvgPaths, { strokeDashoffset: (i, el) => el.getTotalLength() }, { strokeDashoffset: 0, duration: 0.5, ease: 'power2.out', stagger: 0.1, overwrite: true });
-            const onLeave = () => gsap.to(mapSvgPaths, { strokeDashoffset: 0, duration: 0.4, ease: 'power2.out', overwrite: true });
-            footerMapLink.addEventListener('mouseenter', onEnter);
-            footerMapLink.addEventListener('mouseleave', onLeave);
-        }
 
         // ─── Credits pop-out ───
         const creditsWrapper = document.querySelector('.footer-credits-wrapper');
@@ -139,17 +125,13 @@ export default function Footer() {
         // ─── Wiggle on footer interactive elements ───
         const wiggleTargets = [
             { selector: '.footer-column:first-child h3', key: 'jobHeading' },
-            { selector: '.footer-map-link span', key: 'googleMap' },
             { selector: '.footer-email', key: 'email' },
-            { selector: '.footer-whatsapp', key: 'whatsapp' },
+            { selector: '.footer-wa-label', key: 'whatsapp' },
             { selector: '.credits-name', key: 'socials' }, // Added wiggle target for names using social intensity
         ];
         wiggleTargets.forEach(({ selector, key }) => {
             document.querySelectorAll(selector).forEach(el => initWiggle(el, WIGGLE_CONFIG[key]));
         });
-
-        // ─── Social icon wiggle ───
-        document.querySelectorAll('.single-social').forEach(el => initWiggle(el, WIGGLE_CONFIG.socials));
 
     }, []);
 
@@ -161,39 +143,13 @@ export default function Footer() {
                     <span className="footer-badge">looking for a job?</span>
                     <h3>not hiring right now :(</h3>
                 </div>
-                {/* Office */}
-                <div className="footer-column">
-                    <span className="footer-badge">office</span>
-                    <address>
-                        papaverhof 21<br />
-                        1032 LX amsterdam
-                    </address>
-                    <a href="#" className="footer-map-link">
-                        <span>Google Maps</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 169 10" fill="none" className="draw-btn__svg">
-                            <path d="M1 6.5661C56.3941 3.06082 112.187 1.20095 168 0.999878" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25"></path>
-                            <path d="M32.1313 8.63371C68.2147 6.92799 104.462 6.13378 140.695 6.25107" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.25"></path>
-                        </svg>
-                    </a>
-                </div>
                 {/* Contact */}
                 <div className="footer-column">
                     <span className="footer-badge">contact</span>
-                    <a href="mailto:hello@truus.co" className="footer-email">hello@truus.co</a>
-                    <a href="#" className="footer-whatsapp">send us a whatsapp*</a>
-                    <p className="footer-note">*we&apos;re millennials and gen-z: please do not call us.</p>
-                    <div className="footer-socials" id="footer-socials">
-                        {SOCIAL_ICONS.map(({ href, label, svg }) => (
-                            <a
-                                key={label}
-                                href={href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="single-social w-inline-block"
-                                aria-label={label}
-                                dangerouslySetInnerHTML={{ __html: svg }}
-                            />
-                        ))}
+                    <a href="mailto:arclume.us@gmail.com" className="footer-email">arclume.us@gmail.com</a>
+                    <div className="footer-wa">
+                        <img src="/assets/wa_qr_code.png" className="footer-wa-qr" alt="WhatsApp QR code" />
+                        <p className="footer-wa-label">scan to whatsapp us</p>
                     </div>
                 </div>
             </div>

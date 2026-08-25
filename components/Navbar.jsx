@@ -32,7 +32,14 @@ export default function Navbar() {
         if (navbar) { navbar.classList.add('on-dark'); navbar.classList.remove('on-light'); }
 
         const updateNavbarColor = () => {
-            if (!navbar || !contentSection || !footerEl) return;
+            if (!navbar) return;
+            // Pages without the homepage's light sections (e.g. /work) are dark
+            // top-to-bottom, so the navbar stays light the whole way down.
+            if (!contentSection || !footerEl) {
+                navbar.classList.add('on-dark');
+                navbar.classList.remove('on-light');
+                return;
+            }
             const scrollPos = window.scrollY + navbar.offsetHeight / 2;
             const contentTop = contentSection.getBoundingClientRect().top + window.scrollY;
 

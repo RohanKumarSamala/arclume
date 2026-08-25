@@ -8,7 +8,6 @@ import MotionCards from '@/components/MotionCards';
 import Showreel from '@/components/Showreel';
 import DoubleMarquee from '@/components/DoubleMarquee';
 import Footer from '@/components/Footer';
-import TransitionScribble from '@/components/TransitionScribble';
 import CursorBubble from '@/components/CursorBubble';
 import SmoothScroll from '@/components/SmoothScroll';
 import SoundEffects from '@/components/SoundEffects';
@@ -42,7 +41,6 @@ export default function Home() {
             <footer className="main-footer">
                 <Footer />
             </footer>
-            <TransitionScribble />
         </>
     );
 }

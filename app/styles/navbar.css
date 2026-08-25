@@ -59,6 +59,7 @@
     display: block;
     width: 150px;
     aspect-ratio: 1231 / 209;
+    color: inherit;
     background-color: currentColor;
     -webkit-mask-image: url('/assets/Navbar SVG/logo-arclume-mask.png');
     mask-image: url('/assets/Navbar SVG/logo-arclume-mask.png');

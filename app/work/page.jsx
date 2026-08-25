@@ -4,11 +4,10 @@ import React, { useState, useMemo } from 'react';
 import SvgSymbols from '@/components/SvgSymbols';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import TransitionScribble from '@/components/TransitionScribble';
 import CursorBubble from '@/components/CursorBubble';
 import SmoothScroll from '@/components/SmoothScroll';
 import SoundEffects from '@/components/SoundEffects';
-import { OUR_WORKS, AFFILIATED_COMPANIES, CLIENT_REVIEWS } from '@/lib/data';
+import { OUR_WORKS, AFFILIATED_COMPANIES } from '@/lib/data';
 
 export default function WorkPage() {
     const [activeFilter, setActiveFilter] = useState('all');
@@ -258,25 +257,6 @@ export default function WorkPage() {
                     )}
                 </section>
 
-                {/* ─── Client Testimonials ────────────────────────────────────── */}
-                <section className="work-testimonials">
-                    <h2 className="work-testimonials__heading">what clients say about us.</h2>
-                    <div className="reviews-grid">
-                        {CLIENT_REVIEWS.map((rev, index) => (
-                            <div key={index} className="review-card">
-                                <div style={{ marginBottom: '16px', color: '#ffb400' }}>
-                                    {'★'.repeat(rev.rating)}
-                                </div>
-                                <p className="review-quote">"{rev.quote}"</p>
-                                <div>
-                                    <div className="review-author">{rev.author}</div>
-                                    <div className="review-company">{rev.company}</div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-
                 {/* ─── CTA Banner ─────────────────────────────────────────────── */}
                 <section className="work-cta-section">
                     <h2 className="work-cta-title">ready to launch your next big idea?</h2>
@@ -284,9 +264,7 @@ export default function WorkPage() {
                         Partner with Arclume to craft high-performance digital apps, viral content, and cutting-edge AI systems.
                     </p>
                     <a
-                        href="https://wa.me/?text=Hi%20Arclume!%20I'm%20interested%20in%20discussing%20a%20project."
-                        target="_blank"
-                        rel="noreferrer"
+                        href="mailto:arclume.us@gmail.com?subject=Project%20Inquiry%20-%20Arclume&body=Hi%20Arclume!%20I'm%20interested%20in%20discussing%20a%20project."
                         className="work-cta-btn"
                     >
                         <span>Start A Project With Us</span>
@@ -348,9 +326,7 @@ export default function WorkPage() {
 
                                 <div className="modal-actions">
                                     <a
-                                        href="https://wa.me/?text=Hi%20Arclume!%20I%20saw%20your%20case%20study%20and%20want%20something%20similar."
-                                        target="_blank"
-                                        rel="noreferrer"
+                                        href="mailto:arclume.us@gmail.com?subject=Case%20Study%20Inquiry%20-%20Arclume&body=Hi%20Arclume!%20I%20saw%20your%20case%20study%20and%20want%20something%20similar."
                                         className="btn-primary-work"
                                     >
                                         Request Similar Solution →
@@ -365,7 +341,6 @@ export default function WorkPage() {
             <footer className="main-footer">
                 <Footer />
             </footer>
-            <TransitionScribble />
         </>
     );
 }

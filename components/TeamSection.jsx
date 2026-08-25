@@ -85,6 +85,7 @@ export default function TeamSection() {
                             </div>
                             <div className={`motion-card__card-name motion-card__card-name--${member.pillColor || LABEL_COLORS[i % LABEL_COLORS.length]}`}>
                                 <p className="motion-card__floating-text">{member.name}</p>
+                                {member.role && <p className="motion-card__floating-role">{member.role}</p>}
                             </div>
                         </div>
                     ))}
@@ -106,6 +107,7 @@ export default function TeamSection() {
                             </div>
                             <div className={`motion-card__card-name motion-card__card-name--${member.pillColor || LABEL_COLORS[i % LABEL_COLORS.length]}`}>
                                 <p className="motion-card__floating-text">{member.name}</p>
+                                {member.role && <p className="motion-card__floating-role">{member.role}</p>}
                             </div>
                         </div>
                     ))}

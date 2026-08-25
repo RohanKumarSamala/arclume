@@ -9,8 +9,8 @@ import { unlockAudio, playSound } from '@/lib/sound';
 // visually responds to the mouse.
 const INTERACTIVE_SELECTOR = [
     'a', 'button', '[role="button"]', 'input', 'select', 'textarea', 'summary',
-    '.footer-column h3', '.footer-map-link span', '.footer-email', '.footer-whatsapp',
-    '.single-social', '.logo-truus', '.nav-work-btn', '.nav-work-item',
+    '.footer-column h3', '.footer-email',
+    '.logo-truus', '.nav-work-btn', '.nav-work-item',
     '.card', '.motion-card__card', '.showreel-stat',
 ].join(', ');
 

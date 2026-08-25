@@ -29,6 +29,26 @@
     color: var(--color-darkblue);
 }
 
+/* Centred wordmark shown while the scribble covers the screen. Rendered as part
+   of the React tree — never appended to <body>, which React reconciles. */
+.transition-logo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.transition-logo__mark {
+    width: 160px;
+}
+
 /* ─── Transition States ──────────────────────────────────────────────────── */
 body.is-transitioning {
     pointer-events: none !important;

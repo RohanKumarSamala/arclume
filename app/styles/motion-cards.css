@@ -171,19 +171,37 @@
     bottom: 0.7rem;
     left: 0.7rem;
     z-index: 5;
-    padding: 0.2rem 0.7rem;
-    border-radius: 9999px;
+    padding: 0.35rem 0.75rem;
+    border-radius: 12px;
     border-bottom-left-radius: 0;
     max-width: calc(100% - 1.4rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
 }
 
 .motion-card__floating-text {
     pointer-events: none;
     margin: 0;
     font-family: 'DM Sans', sans-serif;
-    font-size: 1rem;
-    font-weight: 450;
+    font-size: 0.95rem;
+    font-weight: 700;
     color: var(--color-dark);
+    line-height: 1.15;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.motion-card__floating-role {
+    pointer-events: none;
+    margin: 0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    opacity: 0.85;
+    line-height: 1.1;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

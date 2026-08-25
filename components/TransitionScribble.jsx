@@ -1,111 +1,111 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ANIMATION_CONFIG } from '@/lib/data';
 
+const TRANSITION_COLORS = [
+    'var(--color-green)', 'var(--color-lightblue)', 'var(--color-darkblue)',
+    'var(--color-lightgreen)', 'var(--color-orange)', 'var(--color-maroon)', 'var(--color-pink)',
+];
+const LIGHT_COLORS = ['var(--color-lightblue)', 'var(--color-lightgreen)', 'var(--color-pink)'];
+
+// Routes that should not get the intro sweep.
+const NO_INTRO = ['/admin'];
+
 export default function TransitionScribble() {
+    const router = useRouter();
+    const pathname = usePathname();
+    // Survives StrictMode's effect → cleanup → effect cycle in dev.
+    const introPlayed = useRef(false);
+    const svgRef = useRef(null);
+    const logoBoxRef = useRef(null);
+
     useEffect(() => {
-        const logoTruusClickable = document.querySelector('.logo-truus');
-        const transitionScribblePath = document.querySelector('.transition-scribble path');
-        const transitionScribbleSvg = document.querySelector('.transition-scribble');
+        const svg = svgRef.current;
+        const path = svg?.querySelector('path');
+        if (!svg || !path) return;
 
-        if (!transitionScribblePath || !transitionScribbleSvg) return;
+        const config = ANIMATION_CONFIG.transitionScribble || {};
+        const durIn = config.durationIn || 0.8;
+        const durOut = config.durationOut || 1.6;
 
-        const transitionColors = [
-            'var(--color-green)', 'var(--color-lightblue)', 'var(--color-darkblue)',
-            'var(--color-lightgreen)', 'var(--color-orange)', 'var(--color-maroon)', 'var(--color-pink)'
-        ];
+        let running = false;
 
-        const runScribbleAnimation = (targetHref = null) => {
-            if (gsap.isTweening(transitionScribblePath) || gsap.isTweening(transitionScribbleSvg) || document.body.classList.contains('is-transitioning')) return;
+        /**
+         * One continuous sweep: cover the screen, swap the route while covered
+         * (client-side, so nothing unmounts this component), then uncover.
+         */
+        const runScribble = (targetHref = null) => {
+            if (running || document.body.classList.contains('is-transitioning')) return;
+            running = true;
 
-            const config = ANIMATION_CONFIG.transitionScribble || {};
-            const durIn = config.durationIn || 0.8;
-            const durOut = config.durationOut || 1.6;
+            gsap.set(svg, { scale: config.scale || 0.7, opacity: 1, x: 0, y: 0, rotation: 0 });
 
-            gsap.set(transitionScribbleSvg, { scale: config.scale || 0.7 });
+            const l = Math.ceil(path.getTotalLength() + 4000);
+            const color = TRANSITION_COLORS[Math.floor(Math.random() * TRANSITION_COLORS.length)];
+            svg.style.color = color;
 
-            const pathLength = transitionScribblePath.getTotalLength();
-            // Buffer to ensure thick stroke ends travel completely off screen without getting cut off
-            const l = Math.ceil(pathLength + 4000);
+            // Rendered as part of this component's JSX — never injected into
+            // <body>, which React owns and would fail to reconcile.
+            const logoBox = logoBoxRef.current;
+            if (logoBox) logoBox.style.color = LIGHT_COLORS.includes(color) ? '#000' : '#fff';
+            const mark = logoBox?.firstElementChild;
 
-            const randomColor = transitionColors[Math.floor(Math.random() * transitionColors.length)];
-            transitionScribbleSvg.style.color = randomColor;
-
-            const lightColors = ['var(--color-lightblue)', 'var(--color-lightgreen)', 'var(--color-pink)'];
-            const logoColor = lightColors.includes(randomColor) ? '#000' : '#fff';
-
-            let transitionLogo = document.querySelector('.transition-logo');
-            if (!transitionLogo) {
-                transitionLogo = document.createElement('div');
-                transitionLogo.className = 'transition-logo';
-                transitionLogo.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:10000; pointer-events:none; opacity:0; display:flex; justify-content:center; align-items:center; transition: color 0.1s;';
-                const logoEl = document.querySelector('.logo-truus');
-                if (logoEl) {
-                    const svgClone = logoEl.cloneNode(true);
-                    svgClone.style.width = '160px';
-                    svgClone.style.height = 'auto';
-                    transitionLogo.appendChild(svgClone);
-                }
-                document.body.appendChild(transitionLogo);
-            }
-
-            if (transitionLogo) transitionLogo.style.color = logoColor;
-
-            gsap.set(transitionScribblePath, {
+            gsap.set(path, {
                 strokeDasharray: `${l} ${l}`,
                 strokeDashoffset: l,
                 strokeWidth: config.strokeWidthStart || '8%',
-                opacity: 1
+                opacity: 1,
             });
-            gsap.set(transitionScribbleSvg, { opacity: 1, x: 0, y: 0, rotation: 0 });
-            if (transitionLogo) gsap.set(transitionLogo, { opacity: 0, scale: 1 });
+            gsap.set(logoBox, { autoAlpha: 0, scale: 1 });
 
             document.body.classList.add('is-transitioning');
-            const cursorBubble = document.querySelector('.cursor-bubble');
-            if (cursorBubble) gsap.to(cursorBubble, { opacity: 0, duration: 0.2 });
+            const bubble = document.querySelector('.cursor-bubble');
+            if (bubble) gsap.to(bubble, { opacity: 0, duration: 0.2 });
 
-            const drawTl = gsap.timeline({
+            const tl = gsap.timeline({
                 onComplete: () => {
+                    running = false;
                     document.body.classList.remove('is-transitioning');
-                    gsap.set(transitionScribblePath, { strokeWidth: '0%', opacity: 0 });
-                    if (transitionLogo) gsap.set(transitionLogo, { opacity: 0 });
-                }
+                    gsap.set(path, { strokeWidth: '0%', opacity: 0 });
+                    gsap.set(logoBox, { autoAlpha: 0 });
+                    if (mark) {
+                        gsap.killTweensOf(mark);
+                        gsap.set(mark, { rotation: 0 });
+                    }
+                },
             });
 
-            // 1. Scribble draws IN (covers the viewport completely)
-            drawTl.to(transitionScribblePath, { strokeDashoffset: 0, duration: durIn, ease: 'power1.inOut' }, 0);
-            drawTl.to(transitionScribblePath, { strokeWidth: config.strokeWidthMax || '31%', duration: durIn, ease: 'power2.inOut' }, 0);
+            // 1. Cover
+            tl.to(path, { strokeDashoffset: 0, duration: durIn, ease: 'power1.inOut' }, 0)
+              .to(path, { strokeWidth: config.strokeWidthMax || '31%', duration: durIn, ease: 'power2.inOut' }, 0);
 
-            // 2. Centered ARCLUME logo appears and wiggles during mid-transition
-            if (transitionLogo && transitionLogo.firstElementChild) {
-                drawTl.set(transitionLogo, { autoAlpha: 0 }, 0);
-                drawTl.to(transitionLogo, {
+            // 2. Wordmark in / out while covered
+            if (mark) {
+                tl.to(logoBox, {
                     autoAlpha: 1,
                     duration: durIn * 0.4,
                     ease: 'power2.out',
-                    onStart: () => {
-                        gsap.to(transitionLogo.firstElementChild, { rotation: 5, duration: 0.15, repeat: -1, yoyo: true, ease: 'steps(1)', overwrite: 'auto' });
-                    }
+                    onStart: () => gsap.to(mark, {
+                        rotation: 5, duration: 0.15, repeat: -1, yoyo: true, ease: 'steps(1)', overwrite: 'auto',
+                    }),
                 }, durIn * 0.3);
 
-                // Fade out logo smoothly before scribble finishes exit
-                drawTl.to(transitionLogo, {
-                    autoAlpha: 0,
-                    duration: durOut * 0.4,
-                    ease: 'power2.in',
-                    onComplete: () => {
-                        gsap.killTweensOf(transitionLogo.firstElementChild);
-                        gsap.set(transitionLogo.firstElementChild, { rotation: 0 });
-                    }
-                }, durIn + (durOut * 0.3));
+                tl.to(logoBox, { autoAlpha: 0, duration: durOut * 0.4, ease: 'power2.in' }, durIn + durOut * 0.3);
             }
 
-            // 3. Execute navigation or page scroll when screen is 100% covered
-            drawTl.call(() => {
+            // 3. Swap route (or scroll home) at full cover — client-side, no reload
+            tl.call(() => {
                 if (targetHref && targetHref !== window.location.pathname) {
-                    window.location.href = targetHref;
+                    // ScrollTrigger's pinning wraps sections in .pin-spacer divs
+                    // that React never created. Leaving them in place during a
+                    // client-side route swap breaks reconciliation, so revert
+                    // them (kill(true)) before handing over to the router.
+                    ScrollTrigger.getAll().forEach((t) => t.kill(true));
+                    router.push(targetHref);
                 } else {
                     const lenis = window.__lenis;
                     if (lenis) lenis.scrollTo(0, { immediate: true });
@@ -113,39 +113,48 @@ export default function TransitionScribble() {
                 }
             }, null, durIn);
 
-            // 4. Scribble draws OUT completely past the screen, tapering to 0 width smoothly
-            drawTl.to(transitionScribblePath, { strokeDashoffset: -l, duration: durOut, ease: 'power2.inOut' }, durIn);
-            drawTl.to(transitionScribblePath, { strokeWidth: '0%', duration: durOut, ease: 'power2.in' }, durIn);
+            // 4. Uncover
+            tl.to(path, { strokeDashoffset: -l, duration: durOut, ease: 'power2.inOut' }, durIn)
+              .to(path, { strokeWidth: '0%', duration: durOut, ease: 'power2.in' }, durIn);
         };
 
-        // Attach listener to logo and navigation links
-        const handleNavClick = (e) => {
-            const anchor = e.currentTarget || e.target.closest('a');
-            if (!anchor) return;
-            const href = anchor.getAttribute('href');
-            if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+        // Delegated so it keeps working after client-side navigation swaps the DOM.
+        const onClick = (e) => {
+            const el = e.target.closest?.('.logo-truus, .logo-work-container, .nav-work-btn, .nav-work-item');
+            if (!el) return;
+
+            const anchor = el.matches('a') ? el : el.closest('a');
+            const href = anchor?.getAttribute('href') || null;
+            if (href && (href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:'))) return;
 
             e.preventDefault();
             e.stopPropagation();
-            runScribbleAnimation(href);
+            runScribble(href);
         };
 
-        const navElements = document.querySelectorAll('.logo-truus, .logo-work-container, .nav-work-btn, .nav-work-item');
-        navElements.forEach(el => el.addEventListener('click', handleNavClick));
+        document.addEventListener('click', onClick, true);
 
-        if (logoTruusClickable) {
-            logoTruusClickable.addEventListener('click', (e) => {
-                e.preventDefault();
-                runScribbleAnimation(null);
-            });
+        // Intro on first load only — later route changes animate via the click above.
+        let introTimer;
+        if (!introPlayed.current && !NO_INTRO.includes(pathname)) {
+            introPlayed.current = true;
+            introTimer = setTimeout(() => runScribble(null), 100);
         }
 
         return () => {
-            navElements.forEach(el => el.removeEventListener('click', handleNavClick));
+            document.removeEventListener('click', onClick, true);
+            clearTimeout(introTimer);
         };
+        // Bound once; navigation is handled by delegation, not by re-running this.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
+        <>
+        <div className="transition-logo" ref={logoBoxRef} aria-hidden="true">
+            <div className="logo-truus transition-logo__mark"></div>
+        </div>
+
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width="100%"
@@ -153,6 +162,7 @@ export default function TransitionScribble() {
             fill="none"
             preserveAspectRatio="none"
             className="transition-scribble"
+            ref={svgRef}
         >
             <path
                 d="M299.654 453.865C505.574 319.225 711.494 184.585 836.054 109.945C960.614 35.3048 997.574 24.7448 944.014 110.385C890.454 196.025 745.254 378.185 571.454 634.385C397.654 890.585 199.654 1215.3 110.854 1382.58C22.0544 1549.86 48.4544 1549.86 77.8944 1540.62C107.334 1531.38 139.014 1512.9 367.854 1319.9C596.694 1126.9 1021.73 759.945 1255.21 555.065C1488.69 350.185 1517.73 318.505 1527.41 306.145C1537.09 293.785 1526.53 301.705 1346.85 618.625C1167.17 935.545 818.694 1561.22 635.214 1896.74C451.734 2232.26 443.814 2258.66 447.654 2268.3C451.494 2277.94 467.334 2270.02 511.134 2236.9C554.934 2203.78 626.214 2145.7 966.534 1817.46C1306.85 1489.22 1914.05 892.585 2263.81 557.505C2613.57 222.425 2687.49 166.985 2741.41 129.185C2795.33 91.3848 2827.01 72.9048 2843.33 67.3448C2859.65 61.7848 2859.65 69.7048 2849.09 96.2248C2838.53 122.745 2817.41 167.625 2584.77 544.505C2352.13 921.385 1370.37 2165.43 1139.25 2537.83C908.134 2910.23 902.854 2926.07 902.774 2939.51C902.694 2952.95 907.974 2963.51 1255.21 2613.87C1602.45 2264.23 2829.73 1017.54 2903.53 1071.46C2977.33 1125.38 2176.12 2817.04 2128 3037C2079.88 3256.96 2911.24 2018.56 3172 1793"
@@ -161,5 +171,6 @@ export default function TransitionScribble() {
                 style={{ strokeWidth: '0%', strokeDashoffset: '0.001', strokeDasharray: '0px, 999999px' }}
             />
         </svg>
+        </>
     );
 }

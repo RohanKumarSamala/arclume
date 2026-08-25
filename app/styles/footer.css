@@ -58,32 +58,6 @@
     cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
 }
 
-.footer-column address {
-    font-family: "Epilogue", Arial, sans-serif;
-    font-style: normal;
-    font-size: 2rem;
-    font-weight: 1000;
-    line-height: 1.2;
-    cursor: url("/assets/Cursor SVG/cursor-text.svg") 12 12, auto;
-}
-
-.footer-map-link {
-    color: var(--color-white);
-    text-decoration: none;
-    font-size: 1.1rem;
-    font-weight: 600;
-    width: fit-content;
-    padding-bottom: 4px;
-    margin-top: 10px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.footer-map-link span {
-    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
-}
-
 .draw-btn__svg {
     width: 40%;
     height: auto;
@@ -101,15 +75,29 @@
     cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
 }
 
-.footer-whatsapp {
-    font-size: 2.2rem;
-    font-weight: 800;
-    margin-top: -10px;
+/* ─── WhatsApp QR ────────────────────────────────────────────────────────── */
+.footer-wa {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.footer-wa-qr {
+    width: 132px;
+    height: auto;
+    border-radius: 8px;
+    background-color: var(--color-white);
+    padding: 8px;
+    display: block;
+}
+
+.footer-wa-label {
+    font-size: 1.1rem;
+    font-weight: 700;
     color: var(--color-white);
-    text-decoration: none;
-    width: fit-content;
-    display: inline-block;
-    cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+    letter-spacing: -0.2px;
 }
 
 .footer-note {

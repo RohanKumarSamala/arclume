@@ -148,6 +148,13 @@
     pointer-events: none;
 }
 
+/* Sticker SVGs have no intrinsic size — pin them to their wrapper's width. */
+.showreel-sticker img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
 .showreel-sticker--camera {
     top: 10%;
     left: 8%;
