@@ -1,0 +1,25 @@
+# Mirrors the Firebase Hosting config (firebase.json) for Apache/cPanel hosting:
+# clean URLs (no .html extension) and a custom 404 page.
+
+RewriteEngine On
+
+# If a request comes in without a trailing slash or extension and a matching
+# .html file exists, serve it (e.g. /about -> /about.html).
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.*)$ $1.html [L]
+
+ErrorDocument 404 /404.html
+
+# Long-lived caching for hashed Next.js static assets.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 week"
+  ExpiresByType image/png "access plus 1 week"
+  ExpiresByType image/svg+xml "access plus 1 week"
+  ExpiresByType image/webp "access plus 1 week"
+  ExpiresByType font/woff2 "access plus 1 week"
+</IfModule>

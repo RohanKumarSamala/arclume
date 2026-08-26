@@ -139,13 +139,13 @@
     z-index: 1;
 }
 
-/* Card 2 — second from left */
+/* Card 2 — second from left, raised above and in front of the others */
 .motion-card__card--2 {
     transform: rotate(6deg);
     margin-right: -2vw;
     left: -2rem;
-    bottom: -3rem;
-    z-index: 2;
+    bottom: 3rem;
+    z-index: 5;
 }
 
 /* Card 3 — third, slightly bigger */
