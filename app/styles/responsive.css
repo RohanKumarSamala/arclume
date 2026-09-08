@@ -104,6 +104,71 @@
         right: -20px;
     }
 
+    /* ── Team Section (Meet the minds) ─────── */
+    .motion-card-section {
+        padding: 60px 20px 60px;
+    }
+
+    .motion-card__heading {
+        margin: 0 auto 40px;
+    }
+
+    .motion-card__title {
+        font-size: 2.6rem;
+        letter-spacing: -1.5px;
+    }
+
+    .motion-card__subtitle {
+        font-size: 2.8rem;
+        letter-spacing: -1px;
+        top: -14px;
+    }
+
+    .motion-card__underline-svg {
+        max-width: 220px;
+        margin: -18px auto 0;
+    }
+
+    .motion-card__blob {
+        display: none;
+    }
+
+    .motion-card__cards-area {
+        min-height: auto;
+        margin: 20px auto 40px;
+    }
+
+    .motion-card__cards {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px 16px;
+    }
+
+    .motion-card__card {
+        width: 42vw;
+        max-width: 165px;
+        height: 52vw;
+        max-height: 205px;
+        margin-right: 0 !important;
+        left: auto !important;
+        bottom: auto !important;
+        top: auto !important;
+        transform: none !important;
+        z-index: 1 !important;
+    }
+
+    .motion-card__card-name {
+        padding: 0.3rem 0.6rem;
+    }
+
+    .motion-card__floating-text {
+        font-size: 0.8rem;
+    }
+
+    .motion-card__floating-role {
+        font-size: 0.62rem;
+    }
+
     /* ── Cards (GSAP-controlled) ─────── */
     .cards-wrapper {
         position: relative !important;

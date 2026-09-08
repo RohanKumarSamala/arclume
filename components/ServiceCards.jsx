@@ -156,7 +156,11 @@ function initCardAnimations() {
             });
         });
 
-        const wrapperH = window.innerHeight * 0.7 + scrollPerCard * (cards.length - 1);
+        // Wrapper only needs to be as tall as one resting card — the pin's own
+        // spacer (via pinSpacing below) reserves the actual scroll distance for
+        // the reveal, so inflating this to the full scroll distance leaves a
+        // dead gap the size of the animation after it unpins.
+        const wrapperH = cards[0].getBoundingClientRect().height + 40;
         gsap.set(cardsWrapper, { height: wrapperH });
 
         ScrollTrigger.create({
