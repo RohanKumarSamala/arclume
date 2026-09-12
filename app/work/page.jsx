@@ -7,7 +7,7 @@ import Footer from '@/components/Footer';
 import CursorBubble from '@/components/CursorBubble';
 import SmoothScroll from '@/components/SmoothScroll';
 import SoundEffects from '@/components/SoundEffects';
-import { OUR_WORKS, AFFILIATED_COMPANIES } from '@/lib/data';
+import { OUR_WORKS, COMPANIES_WE_WORKED_WITH } from '@/lib/data';
 
 export default function WorkPage() {
     const [activeFilter, setActiveFilter] = useState('all');
@@ -39,8 +39,8 @@ export default function WorkPage() {
 
     const filteredAffiliated = useMemo(() => {
         const q = searchQuery.trim().toLowerCase();
-        if (!q) return AFFILIATED_COMPANIES;
-        return AFFILIATED_COMPANIES.filter((project) => {
+        if (!q) return COMPANIES_WE_WORKED_WITH;
+        return COMPANIES_WE_WORKED_WITH.filter((project) => {
             return (
                 project.title.toLowerCase().includes(q) ||
                 project.client.toLowerCase().includes(q) ||
@@ -50,6 +50,8 @@ export default function WorkPage() {
             );
         });
     }, [searchQuery]);
+
+    const filteredPartners = filteredAffiliated;
 
     return (
         <>
@@ -78,7 +80,7 @@ export default function WorkPage() {
                     </h1>
 
                     <p className="work-hero__subtitle">
-                        Discover our client case studies, digital apps, viral campaigns, modern web platforms & affiliated venture partners.
+                        Discover our client case studies, digital apps, viral campaigns, modern web platforms & partner collaborations.
                     </p>
                 </section>
 
@@ -194,19 +196,19 @@ export default function WorkPage() {
                 <section className="work-section-block">
                     <div className="work-section-header">
                         <h2 className="work-section-title">
-                            affiliated companies.
+                            companies we worked with.
                             <span className="section-tag" style={{ background: 'var(--color-lightblue)' }}>
-                                strategic partners
+                                partners
                             </span>
                         </h2>
                         <p className="work-section-desc">
-                            Our trusted venture collaborations, strategic brand partnerships & ecosystem affiliates.
+                            Our trusted collaborations, strategic brand partnerships & companies we've built for.
                         </p>
                     </div>
 
                     {filteredAffiliated.length === 0 ? (
                         <div style={{ textAlign: 'center', padding: '40px 20px', background: '#fff', borderRadius: '24px' }}>
-                            <h3 style={{ fontSize: '1.3rem', marginBottom: '8px' }}>no affiliated partners found</h3>
+                            <h3 style={{ fontSize: '1.3rem', marginBottom: '8px' }}>no partners found</h3>
                             <p style={{ color: 'rgba(0,0,0,0.6)' }}>Try clearing your search query.</p>
                         </div>
                     ) : (
