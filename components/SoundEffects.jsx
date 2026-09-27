@@ -11,7 +11,7 @@ const INTERACTIVE_SELECTOR = [
     'a', 'button', '[role="button"]', 'input', 'select', 'textarea', 'summary',
     '.footer-column h3', '.footer-email',
     '.logo-truus', '.nav-work-btn', '.nav-work-item',
-    '.card', '.motion-card__card', '.showreel-stat',
+    '.card', '.motion-card__card',
 ].join(', ');
 
 function findInteractive(el) {

@@ -5,7 +5,6 @@ import Navbar from '@/components/Navbar';
 import VimeoHero from '@/components/VimeoHero';
 import ServiceCards from '@/components/ServiceCards';
 import MotionCards from '@/components/MotionCards';
-import Showreel from '@/components/Showreel';
 import DoubleMarquee from '@/components/DoubleMarquee';
 import Footer from '@/components/Footer';
 import CursorBubble from '@/components/CursorBubble';
@@ -30,7 +29,6 @@ export default function Home() {
                 <div className="content-section motion-cards-wrapper">
                     <MotionCards />
                 </div>
-                <Showreel />
                 <div className="content-section service-cards-wrapper">
                     <ServiceCards />
                 </div>
