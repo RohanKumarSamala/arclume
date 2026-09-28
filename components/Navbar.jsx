@@ -33,6 +33,12 @@ export default function Navbar() {
 
         const updateNavbarColor = () => {
             if (!navbar) return;
+            if (window.scrollY > 30) {
+                navbar.classList.add('is-scrolled');
+            } else {
+                navbar.classList.remove('is-scrolled');
+            }
+
             // Pages without the homepage's light sections (e.g. /work) are dark
             // top-to-bottom, so the navbar stays light the whole way down.
             if (!contentSection || !footerEl) {

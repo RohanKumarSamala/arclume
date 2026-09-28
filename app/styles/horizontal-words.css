@@ -30,6 +30,8 @@
     bottom: 100%;
     left: 50%;
     transform: translate(-160%, -35%);
+    color: #ffffff;
+    filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.2));
 }
 
 .horizontal-words__bottom-text {
@@ -51,7 +53,12 @@
     line-height: 1.4;
     font-weight: 450;
     margin: 0;
-    /* Removed the hacky centered margin */
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.horizontal-words__bottom-text-l em {
+    color: #ffffff;
+    font-style: italic;
 }
 
 .horizontal-words__sticker-svg {
@@ -85,6 +92,8 @@
     top: 50%;
     left: 100%;
     transform: translate(50%);
+    color: #ffffff;
+    filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.2));
 }
 
 .horizontal-words__sticker-watch {
@@ -98,7 +107,8 @@
 }
 
 .horizontal-words__placeholder-left-svg {
-    opacity: .05;
+    opacity: .04;
+    filter: invert(1);
     width: 90em;
     position: absolute;
     top: 50%;
@@ -115,4 +125,6 @@
     position: relative;
     z-index: 2;
     white-space: nowrap;
+    color: #ffffff;
+    text-shadow: 0 4px 40px rgba(0, 0, 0, 0.6);
 }

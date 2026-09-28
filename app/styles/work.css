@@ -690,10 +690,10 @@
 }
 
 .filter-btn.active {
-    background: var(--bg-color);
-    color: var(--color-dark);
-    border-color: var(--bg-color);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    background: #ffffff;
+    color: #090a0f;
+    border-color: #ffffff;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
 }
 
 .work-search-input {
@@ -707,9 +707,9 @@
 }
 
 .work-search-input:focus {
-    border-color: var(--bg-color);
+    border-color: rgba(255, 255, 255, 0.4);
     background: var(--work-surface-2);
-    box-shadow: 0 0 0 3px rgba(240, 235, 230, 0.1);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 
 .work-search-icon {
@@ -742,8 +742,8 @@
 }
 
 .project-card__arrow {
-    background: var(--bg-color);
-    color: var(--color-dark);
+    background: #ffffff;
+    color: #090a0f;
 }
 
 /* ── Modal ────────────────────────────────────────────────────────────────── */
@@ -759,8 +759,8 @@
 }
 
 .modal-close-btn:hover {
-    background: var(--bg-color);
-    color: var(--color-dark);
+    background: #ffffff;
+    color: #090a0f;
 }
 
 .modal-grid-details {
@@ -776,13 +776,13 @@
 }
 
 .btn-primary-work {
-    background: var(--bg-color);
-    color: var(--color-dark);
+    background: #ffffff;
+    color: #090a0f;
 }
 
 .btn-primary-work:hover {
-    background: var(--color-orange);
-    color: var(--color-dark);
+    background: var(--color-orange-glow);
+    color: #ffffff;
 }
 
 /* ── Testimonials ─────────────────────────────────────────────────────────── */

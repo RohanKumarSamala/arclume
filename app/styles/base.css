@@ -13,19 +13,53 @@
 
 /* ─── Design Tokens ─────────────────────────────────────────────────────────── */
 :root {
-    --color-green: #29725f;
-    --color-lightblue: #82a0ff;
-    --color-darkblue: #4b69f0;
-    --color-lightgreen: #e6fab9;
-    --color-orange: #f5693c;
-    --color-maroon: #a0325a;
-    --color-pink: #f0befa;
-    --bg-color: #f0ebe6;
+    /* Base background & surface tokens */
+    --bg-color: #090a0f;
+    --bg-surface: #10131a;
+    --bg-surface-elevated: #151822;
+    --bg-glass: rgba(16, 19, 28, 0.85);
+
+    /* Text & foreground tokens */
     --color-white: #ffffff;
-    --color-black: #000000;
-    --color-dark: #1a1a1a;
-    --color-black-soft: #111111;
-    --color-black-deep: #0a0a0a;
+    --color-text-primary: #f5f6fa;
+    --color-text-secondary: rgba(245, 246, 250, 0.72);
+    --color-text-muted: rgba(245, 246, 250, 0.45);
+    --color-cream: #f0ebe6;
+
+    /* Legacy variable mappings remapped for dark theme contrast */
+    --color-dark: #f5f6fa;
+    --color-black: #ffffff;
+    --color-black-soft: #0e1017;
+    --color-black-deep: #07080b;
+
+    /* Sophisticated dark jewel-tone cards & accent colors */
+    --color-green: #0d2821;
+    --color-green-glow: #10b981;
+    --color-green-border: rgba(16, 185, 129, 0.3);
+
+    --color-lightblue: #132238;
+    --color-lightblue-glow: #60a5fa;
+    --color-lightblue-border: rgba(96, 165, 250, 0.3);
+
+    --color-darkblue: #0f1322;
+    --color-darkblue-glow: #818cf8;
+    --color-darkblue-border: rgba(129, 140, 248, 0.3);
+
+    --color-lightgreen: #19261a;
+    --color-lightgreen-glow: #a3e635;
+    --color-lightgreen-border: rgba(163, 230, 53, 0.25);
+
+    --color-orange: #2e1810;
+    --color-orange-glow: #fb923c;
+    --color-orange-border: rgba(251, 146, 60, 0.3);
+
+    --color-maroon: #2d101e;
+    --color-maroon-glow: #f43f5e;
+    --color-maroon-border: rgba(244, 63, 94, 0.3);
+
+    --color-pink: #241334;
+    --color-pink-glow: #c084fc;
+    --color-pink-border: rgba(192, 132, 252, 0.3);
 }
 
 /* ─── Reset ─────────────────────────────────────────────────────────────────── */
@@ -36,8 +70,8 @@
 }
 
 ::selection {
-    background-color: var(--color-pink);
-    color: var(--color-black);
+    background-color: rgba(192, 132, 252, 0.35);
+    color: #ffffff;
 }
 
 /* Prevent selection on non-text elements */
@@ -56,6 +90,11 @@ object {
 /* ─── Base Elements ──────────────────────────────────────────────────────────── */
 body {
     background-color: var(--bg-color);
+    background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 119, 198, 0.12), transparent),
+        radial-gradient(ellipse 60% 40% at 90% 40%, rgba(59, 130, 246, 0.05), transparent),
+        radial-gradient(ellipse 50% 30% at 10% 75%, rgba(168, 85, 247, 0.05), transparent);
+    background-attachment: fixed;
     font-family: 'Epilogue', sans-serif;
     color: var(--color-dark);
     overflow-x: hidden;
