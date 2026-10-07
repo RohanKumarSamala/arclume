@@ -116,3 +116,40 @@
     z-index: 2;
     white-space: nowrap;
 }
+
+/* ─── Phones ─────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .horizontal-words-section {
+        height: 100vh;
+        height: 100svh;
+        padding: 0;
+    }
+
+    .horizontal-words__h2 {
+        font-size: 17vw;
+        letter-spacing: -0.03em;
+    }
+
+    /* arrows and stickers are sized in em — scale them with the headline */
+    .horizontal-words__relative {
+        font-size: 11px;
+        top: 44%;
+    }
+
+    .horizontal-words__bottom-text {
+        width: 100%;
+        padding: 0 24px;
+        transform: translate(-50%, 6.5em);
+    }
+
+    .horizontal-words__bottom-text-l {
+        max-width: 22em;
+        font-size: 1.05rem;
+        line-height: 1.45;
+        text-wrap: balance;
+    }
+
+    .horizontal-words__bottom-text-l br {
+        display: none;
+    }
+}

@@ -1,11 +1,38 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CARDS_DATA } from '@/lib/data';
+import CardDiagram from '@/components/CardDiagrams';
 
 export default function ServiceCards() {
+    const wrapperRef = useRef(null);
+    const [activeCard, setActiveCard] = useState(0);
+
+    // Touch screens have no hover, so a card "wakes up" (straightens and plays
+    // its diagram) when it sits in the middle of the screen instead.
+    useEffect(() => {
+        const wrapper = wrapperRef.current;
+        if (!wrapper || !window.matchMedia('(hover: none), (max-width: 768px)').matches) return undefined;
+
+        const cards = Array.from(wrapper.querySelectorAll('.card'));
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                entry.target.classList.toggle('is-active', entry.isIntersecting);
+                if (entry.isIntersecting) setActiveCard(cards.indexOf(entry.target));
+            });
+        }, { rootMargin: '-30% -35% -30% -35%' });
+
+        cards.forEach((card) => observer.observe(card));
+        return () => observer.disconnect();
+    }, []);
+
+    const goToCard = (index) => {
+        const card = wrapperRef.current?.querySelectorAll('.card')[index];
+        card?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    };
+
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
 
@@ -37,7 +64,7 @@ export default function ServiceCards() {
             </div>
 
             {/* ─── Service Cards ─── */}
-            <div className="cards-wrapper" id="cards-wrapper">
+            <div className="cards-wrapper" id="cards-wrapper" ref={wrapperRef}>
                 {CARDS_DATA.map((card) => (
                     <div key={card.color} className={`card card-${card.color}`}>
                         <div className={`card-sticker sticker-${card.sticker}`}>
@@ -63,7 +90,23 @@ export default function ServiceCards() {
                                 </li>
                             ))}
                         </ul>
+                        <CardDiagram type={card.diagram} />
                     </div>
+                ))}
+            </div>
+
+            {/* Swipe position — phones only (hidden by CSS elsewhere) */}
+            <div className="cards-dots" role="tablist" aria-label="Services">
+                {CARDS_DATA.map((card, index) => (
+                    <button
+                        key={card.color}
+                        type="button"
+                        role="tab"
+                        aria-selected={activeCard === index}
+                        aria-label={card.title}
+                        className={`cards-dots__dot ${activeCard === index ? 'is-active' : ''}`}
+                        onClick={() => goToCard(index)}
+                    ></button>
                 ))}
             </div>
         </>
@@ -139,54 +182,7 @@ function initCardAnimations() {
                 }, 80);
             });
         });
-    } else {
-        // ─── Mobile: Stacked card scroll reveal ───
-        const cardsWrapper = document.querySelector('.cards-wrapper');
-        const scrollPerCard = window.innerHeight * 0.8;
-        const navH = 60;
-        const mobileRotations = [-6, 4, -8, 5, -3];
-
-        cards.forEach((card, i) => {
-            gsap.set(card, {
-                position: 'absolute', left: '50%', top: '0', xPercent: -50,
-                y: i === 0 ? 0 : window.innerHeight * 1.1,
-                rotation: mobileRotations[i % mobileRotations.length],
-                zIndex: i + 1,
-                transformOrigin: 'center center'
-            });
-        });
-
-        // Wrapper only needs to be as tall as one resting card — the pin's own
-        // spacer (via pinSpacing below) reserves the actual scroll distance for
-        // the reveal, so inflating this to the full scroll distance leaves a
-        // dead gap the size of the animation after it unpins.
-        const wrapperH = cards[0].getBoundingClientRect().height + 40;
-        gsap.set(cardsWrapper, { height: wrapperH });
-
-        ScrollTrigger.create({
-            trigger: cardsWrapper,
-            start: `top ${navH}px`,
-            end: `+=${scrollPerCard * (cards.length - 1)}`,
-            pin: true,
-            pinSpacing: true,
-            id: 'mobile-cards-pin'
-        });
-
-        cards.forEach((card, i) => {
-            if (i === 0) return;
-            gsap.fromTo(card,
-                { y: window.innerHeight * 1.1 },
-                {
-                    y: 0,
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: cardsWrapper,
-                        start: `top+=${(i - 1) * scrollPerCard} ${navH}px`,
-                        end: `top+=${i * scrollPerCard} ${navH}px`,
-                        scrub: 0.4
-                    }
-                }
-            );
-        });
     }
+    // Phones: the cards are a native swipe carousel (see responsive.css), so
+    // there is nothing to wire up here — no pinning, no scroll hijacking.
 }

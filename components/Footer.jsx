@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { WIGGLE_CONFIG } from '@/lib/data';
+import { WIGGLE_CONFIG, WHATSAPP_URL } from '@/lib/data';
 
 function initWiggle(element, intensity) {
     const target = element.querySelector('[data-wiggle-target]') || element;
@@ -85,7 +85,9 @@ export default function Footer() {
             duration: 0.7, ease: 'back.out(1.7)', stagger: 0.12,
             scrollTrigger: {
                 trigger: '.footer-stickers',
-                start: 'top 80%',
+                // The wordmark sits at the very end of the page, so on short
+                // footers (phones) it never climbs to 80% — fire as it enters.
+                start: 'top bottom-=40',
                 toggleActions: 'play none none reverse' // Play on enter, reverse on leave up
             }
         });
@@ -147,10 +149,19 @@ export default function Footer() {
                 <div className="footer-column">
                     <span className="footer-badge">contact</span>
                     <a href="mailto:arclume.us@gmail.com" className="footer-email">arclume.us@gmail.com</a>
-                    <div className="footer-wa">
-                        <img src="/assets/wa_qr_code.png" className="footer-wa-qr" alt="WhatsApp QR code" />
-                        <p className="footer-wa-label">scan to whatsapp us</p>
-                    </div>
+                    <a
+                        href={WHATSAPP_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="footer-wa"
+                        aria-label="Chat with us on WhatsApp"
+                    >
+                        <img src="/assets/wa_qr_code.png" className="footer-wa-qr" alt="" loading="lazy" />
+                        <p className="footer-wa-label">
+                            <span className="footer-wa-label--scan">scan to whatsapp us</span>
+                            <span className="footer-wa-label--tap">tap to whatsapp us →</span>
+                        </p>
+                    </a>
                 </div>
             </div>
 

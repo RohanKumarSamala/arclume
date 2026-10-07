@@ -77,6 +77,8 @@
 
 /* ─── WhatsApp QR ────────────────────────────────────────────────────────── */
 .footer-wa {
+    text-decoration: none;
+    width: fit-content;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -338,4 +340,19 @@
     bottom: 15%;
     width: 130px;
     transform: rotate(5deg);
+}
+
+/* The QR is for scanning from another screen; on a phone it becomes a button. */
+.footer-wa-label--tap {
+    display: none;
+}
+
+@media (hover: none) {
+    .footer-wa-label--scan {
+        display: none;
+    }
+
+    .footer-wa-label--tap {
+        display: inline;
+    }
 }

@@ -210,3 +210,250 @@
     right: var(--sticker-heart-right);
     transform: rotate(1deg);
 }
+
+/* ─── Card hover diagrams ────────────────────────────────────────────────────
+   A small animated sketch that unfolds under the list while a card is hovered
+   (markup: components/CardDiagrams.jsx). Pointer devices only — on touch the
+   cards are scroll-driven, so the sketch stays out of the layout entirely. */
+.card-viz {
+    display: none;
+}
+
+@media (hover: hover) and (min-width: 769px) {
+    /* Let a card grow downward when its sketch needs more room than it has. */
+    .card {
+        height: auto;
+        min-height: 460px;
+    }
+
+    .card-viz {
+        display: grid;
+        grid-template-rows: 0fr;
+        margin-top: -1.5rem; /* cancels the card's flex gap while collapsed */
+        opacity: 0;
+        transition:
+            grid-template-rows 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+            margin-top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+            opacity 0.25s ease;
+    }
+
+    .card:hover .card-viz {
+        grid-template-rows: 1fr;
+        margin-top: 0;
+        opacity: 1;
+        transition-delay: 0s, 0s, 0.12s;
+    }
+}
+
+.card-viz__inner {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.card-viz__panel {
+    padding: 10px;
+    border-radius: 12px;
+    border: 1.5px dashed color-mix(in srgb, currentColor 35%, transparent);
+    background: color-mix(in srgb, currentColor 7%, transparent);
+}
+
+.card-viz__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+/* ── Drawing primitives ─────────────────────────────────────────────────── */
+.viz-node {
+    --viz-rest: 0.1;
+    fill: currentColor;
+    fill-opacity: var(--viz-rest);
+    stroke: currentColor;
+    stroke-width: 1.5;
+}
+
+.viz-fill {
+    --viz-rest: 0.22;
+    fill: currentColor;
+    fill-opacity: var(--viz-rest);
+}
+
+.viz-solid {
+    --viz-rest: 1;
+    --viz-peak: 0.45;
+    fill: currentColor;
+}
+
+.viz-stroke,
+.viz-line,
+.viz-ring {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.viz-stroke--bold {
+    stroke-width: 2;
+}
+
+.viz-line {
+    stroke-dasharray: 3 5;
+    opacity: 0.85;
+}
+
+.viz-line--thin {
+    stroke-width: 1;
+    opacity: 0.45;
+}
+
+.viz-ring {
+    stroke-dasharray: 2 6;
+    opacity: 0.6;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.viz-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1px;
+    fill: currentColor;
+    text-anchor: middle;
+}
+
+.viz-pop,
+.viz-grow {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.viz-grow {
+    transform-origin: left center;
+}
+
+.viz-cursor {
+    transform: translate(70px, 103px);
+}
+
+/* Touch screens (no hover): the sketch is simply part of the card. */
+@media (hover: none), (max-width: 768px) {
+    .card-viz {
+        display: block;
+    }
+}
+
+.cards-dots {
+    display: none;
+}
+
+/* The pointer needs an edge in the card's own colour to stay readable. */
+.viz-cursor__arrow {
+    stroke: var(--viz-card-bg, transparent);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    paint-order: stroke;
+}
+
+.card-green { --viz-card-bg: var(--color-green); }
+.card-darkblue { --viz-card-bg: var(--color-lightblue); }
+.card-orange { --viz-card-bg: var(--color-orange); }
+.card-maroon { --viz-card-bg: var(--color-maroon); }
+.card-pink { --viz-card-bg: var(--color-pink); }
+
+/* ── Motion — only while hovered, so every hover replays the build-up ───── */
+.d1 { --viz-d: 0.10s; }
+.d2 { --viz-d: 0.18s; }
+.d3 { --viz-d: 0.26s; }
+.d4 { --viz-d: 0.34s; }
+.d5 { --viz-d: 0.42s; }
+.d6 { --viz-d: 0.50s; }
+.d7 { --viz-d: 0.58s; }
+.d8 { --viz-d: 0.66s; }
+
+.p0 { --viz-p: 0s; }
+.p1 { --viz-p: 0.45s; }
+.p2 { --viz-p: 0.9s; }
+.p3 { --viz-p: 1.35s; }
+
+@media (prefers-reduced-motion: no-preference) {
+    .card:hover .viz-pop,
+    .card.is-active .viz-pop {
+        animation: viz-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) var(--viz-d, 0s) both;
+    }
+
+    .card:hover .viz-grow,
+    .card.is-active .viz-grow {
+        animation: viz-grow 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) var(--viz-d, 0s) both;
+    }
+
+    .card:hover .viz-pop.viz-pulse,
+    .card.is-active .viz-pop.viz-pulse {
+        animation:
+            viz-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) var(--viz-d, 0s) both,
+            viz-pulse 2.4s ease-in-out calc(0.8s + var(--viz-p, 0s)) infinite;
+    }
+
+    .card:hover .viz-grow.viz-pulse,
+    .card.is-active .viz-grow.viz-pulse {
+        animation:
+            viz-grow 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) var(--viz-d, 0s) both,
+            viz-pulse 2.4s ease-in-out calc(0.8s + var(--viz-p, 0s)) infinite;
+    }
+
+    /* Pulse on a shape that isn't itself popping (it sits inside a popping group) */
+    .card:hover .viz-pulse:not(.viz-pop):not(.viz-grow),
+    .card.is-active .viz-pulse:not(.viz-pop):not(.viz-grow) {
+        animation: viz-pulse 2.4s ease-in-out calc(0.8s + var(--viz-p, 0s)) infinite;
+    }
+
+    .card:hover .viz-line,
+    .card.is-active .viz-line {
+        animation: viz-flow 0.7s linear infinite;
+    }
+
+    .card:hover .viz-ring,
+    .card.is-active .viz-ring {
+        animation: viz-spin 9s linear infinite;
+    }
+
+    .card:hover .viz-cursor,
+    .card.is-active .viz-cursor {
+        animation: viz-cursor 2.4s cubic-bezier(0.4, 0, 0.2, 1) 0.6s infinite both;
+    }
+}
+
+@keyframes viz-pop {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes viz-grow {
+    from { transform: scaleX(0); opacity: 0; }
+    to { transform: scaleX(1); opacity: 1; }
+}
+
+@keyframes viz-pulse {
+    0%, 30%, 100% { fill-opacity: var(--viz-rest, 0.1); }
+    12% { fill-opacity: var(--viz-peak, 0.6); }
+}
+
+@keyframes viz-flow {
+    to { stroke-dashoffset: -8; }
+}
+
+@keyframes viz-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes viz-cursor {
+    0% { transform: translate(214px, 112px); opacity: 0; }
+    15% { opacity: 1; }
+    55%, 62% { transform: translate(70px, 103px) scale(1); }
+    67% { transform: translate(70px, 103px) scale(0.8); }
+    72%, 90% { transform: translate(70px, 103px) scale(1); opacity: 1; }
+    100% { transform: translate(70px, 103px); opacity: 0; }
+}

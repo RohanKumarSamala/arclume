@@ -24,6 +24,13 @@
     }
 }
 
+/* Tablet cards are wider, so the title runs under the sticker — keep it clear */
+@media (min-width: 769px) and (max-width: 1200px) {
+    .card-title {
+        padding-right: 110px;
+    }
+}
+
 /* ─── Medium screens (≤ 900px) ───────────────────────────────────────────── */
 @media (max-width: 900px) {
     .footer-top {
@@ -169,24 +176,139 @@
         font-size: 0.62rem;
     }
 
-    /* ── Cards (GSAP-controlled) ─────── */
+    /* ── Service cards → swipe carousel ─────── */
+    .service-cards-wrapper {
+        padding-bottom: 20px;
+    }
+
     .cards-wrapper {
-        position: relative !important;
-        display: block !important;
-        width: 100% !important;
-        margin: 0 auto !important;
-        overflow: visible !important;
+        position: relative;
+        display: flex;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 14px;
+        width: 100%;
+        max-width: none;
+        height: auto;
+        margin: 0;
+        /* top room for the stickers that poke out above each card */
+        padding: 64px max(9vw, calc(50vw - 170px)) 36px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: max(9vw, calc(50vw - 170px));
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .cards-wrapper::-webkit-scrollbar {
+        display: none;
     }
 
     .card {
+        position: relative;
+        left: auto !important;
+        top: auto !important;
+        right: auto !important;
+        flex: 0 0 82vw;
         width: 82vw;
         max-width: 340px;
-        min-height: 420px;
         height: auto;
+        min-height: 0;
+        justify-content: flex-start;
+        gap: 1.1rem;
+        padding: 3.25rem 1.25rem 1.25rem;
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+        z-index: 1 !important;
+        transform: rotate(var(--card-tilt, 0deg)) scale(0.96) !important;
+        transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.45s ease;
     }
 
+    .card:nth-child(odd) { --card-tilt: -2.5deg; }
+    .card:nth-child(even) { --card-tilt: 2.5deg; }
+
+    .card.is-active {
+        transform: rotate(0deg) scale(1) !important;
+        box-shadow: 0 18px 36px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-title {
+        margin-top: 18px;
+        font-size: 2rem;
+    }
+
+    .card-list li {
+        font-size: 1.05rem;
+        margin-bottom: 6px;
+    }
+
+    /* keeps every sketch on the same line, whatever the list length */
+    .card-viz {
+        margin-top: auto;
+    }
+
+    /* Stickers ride on the card's top edge, clear of the title */
     .card-sticker {
         pointer-events: none;
+    }
+
+    .card-sticker.sticker-camera {
+        width: 118px;
+        top: -52px;
+        left: auto;
+        right: 14px;
+    }
+
+    .card-sticker.sticker-smiley,
+    .card-sticker.sticker-hand,
+    .card-sticker.sticker-phone {
+        width: 92px;
+        top: -46px;
+        left: auto;
+        right: 22px;
+        transform: rotate(6deg);
+    }
+
+    .card-sticker.sticker-heart {
+        width: 108px;
+        top: -46px;
+        right: 16px;
+    }
+
+    .cards-dots {
+        display: flex;
+        justify-content: center;
+        gap: 4px;
+    }
+
+    .cards-dots__dot {
+        position: relative;
+        width: 28px;
+        height: 44px;
+        border: none;
+        background: none;
+        padding: 0;
+    }
+
+    .cards-dots__dot::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 8px;
+        height: 8px;
+        border-radius: 8px;
+        background: var(--color-black);
+        opacity: 0.2;
+        transform: translate(-50%, -50%);
+        transition: width 0.3s ease, opacity 0.3s ease;
+    }
+
+    .cards-dots__dot.is-active::before {
+        width: 22px;
+        opacity: 1;
     }
 
     /* ── Double Marquee ─────────────── */
@@ -388,3 +510,155 @@
         font-size: 0.95rem;
     }
 }
+
+/* ─── Touch & small-screen polish ────────────────────────────────────────── */
+/* Hover pop-outs have no place on touch: taps go straight to their target. */
+@media (hover: none) {
+    .nav-popout,
+    .nav-overlay,
+    .cursor-bubble,
+    .vimeo-mute-bubble {
+        display: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Over light sections the bar gets a frosted backing, so page content
+       scrolling underneath never tangles with the logo. */
+    .navbar.on-light {
+        background: rgba(240, 235, 230, 0.82);
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+    }
+
+    .navbar {
+        padding: 10px 16px;
+        transition: color 0.4s ease, background-color 0.3s ease;
+    }
+
+    /* Finger-sized targets without changing how anything looks. */
+    .logo-truus,
+    .logo-whatsapp,
+    .footer-email,
+    .footer-credits {
+        position: relative;
+    }
+
+    .logo-truus::after,
+    .logo-whatsapp::after,
+    .footer-email::after,
+    .footer-credits::after {
+        content: '';
+        position: absolute;
+        inset: -14px -10px;
+    }
+
+    .vimeo-hero__btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .footer-email {
+        display: inline-block;
+        overflow-wrap: anywhere;
+    }
+
+    .motion-card__floating-role {
+        font-size: 0.7rem;
+    }
+
+    /* Section headings sized to the screen instead of a fixed size */
+    .main-title {
+        font-size: clamp(2.2rem, 11vw, 3rem);
+        letter-spacing: -0.05em;
+        white-space: nowrap;
+    }
+
+    /* Team heading: keep the sticker off the words */
+    .motion-card__sticker--top {
+        width: 104px;
+        top: -64px;
+        right: -18px;
+    }
+
+    .motion-card__heading {
+        margin-top: 40px;
+    }
+
+    /* Long job titles wrap instead of being cut off */
+    .motion-card__floating-role {
+        white-space: normal;
+        overflow: visible;
+    }
+
+    /* Partners: breathing room before the footer */
+    .Double-marquee {
+        padding-bottom: 28px;
+    }
+
+    /* Footer: as tall as its content, not a full extra screen */
+    .footer-inner {
+        min-height: 0;
+    }
+
+    .footer-bottom {
+        margin-top: 150px;
+    }
+
+    /* Stickers perch along the top of the wordmark instead of covering it */
+    .footer-stickers {
+        top: auto;
+        bottom: 62%;
+        left: 0;
+        transform: none;
+        height: 96px;
+    }
+
+    .footer-sticker,
+    .footer-sticker.sticker-hands,
+    .footer-sticker.sticker-100,
+    .footer-sticker.sticker-camera,
+    .sticker-boom,
+    .sticker-smiley,
+    .sticker-heart {
+        width: 58px;
+    }
+
+    .sticker-boom { left: 1%; bottom: 0; }
+    .sticker-smiley { left: 17%; bottom: 22%; }
+    .sticker-heart { left: 34%; bottom: 2%; }
+    .footer-sticker.sticker-hands { left: 50%; bottom: 26%; }
+    .footer-sticker.sticker-100 { left: 66%; bottom: 0; }
+    .footer-sticker.sticker-camera { right: 1%; bottom: 20%; }
+
+    /* the desktop wordmark is deliberately cropped; on a phone show it whole */
+    .footer-big-text {
+        margin-bottom: 0;
+    }
+
+    /* Decorative blob must not hang off the left edge */
+    .marquee-blob-container {
+        left: 28%;
+    }
+}
+
+/* ─── Small phones (≤ 380px) ─────────────────────────────────────────────── */
+@media (max-width: 380px) {
+    .main-title {
+        font-size: 2.5rem;
+    }
+
+    .motion-card__title,
+    .marquee-left h2 {
+        font-size: 2.3rem;
+    }
+
+    .motion-card__subtitle {
+        font-size: 2.4rem;
+    }
+
+    .card-title {
+        font-size: 1.8rem;
+    }
+}
+

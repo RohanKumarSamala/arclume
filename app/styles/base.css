@@ -59,12 +59,19 @@ body {
     font-family: 'Epilogue', sans-serif;
     color: var(--color-dark);
     overflow-x: hidden;
+    overflow-x: clip;
+    -webkit-tap-highlight-color: transparent;
     scrollbar-width: none;
     -ms-overflow-style: none;
     cursor: url("/assets/Cursor SVG/cursor-default.svg") 2 0, auto;
 }
 
 html {
+    /* Nothing may widen the page: on phones a single over-wide element makes
+       the whole site pannable sideways and pushes the fixed navbar off-screen. */
+    overflow-x: clip;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     scrollbar-width: none;
     -ms-overflow-style: none;
 }

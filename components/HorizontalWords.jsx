@@ -203,8 +203,8 @@ const HorizontalWords = () => {
 
             <div className="horizontal-words__bottom-text">
                 <div className="horizontal-words__bottom-text-l">
-                    From web development <em>and</em> e-commerce to AI<br />
-                    and automation, we build smart, scalable solutions<br />
+                    From web development <em>and</em> e-commerce to AI<br />{' '}
+                    and automation, we build smart, scalable solutions<br />{' '}
                     that help businesses move faster.
                 </div>
             </div>
