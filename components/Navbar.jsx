@@ -33,20 +33,17 @@ export default function Navbar() {
 
         const updateNavbarColor = () => {
             if (!navbar) return;
-            if (window.scrollY > 30) {
-                navbar.classList.add('is-scrolled');
-            } else {
-                navbar.classList.remove('is-scrolled');
-            }
+            const scrollPos = window.scrollY + navbar.offsetHeight / 2;
 
-            // Pages without the homepage's light sections (e.g. /work) are dark
-            // top-to-bottom, so the navbar stays light the whole way down.
+            // Pages without the homepage's video hero (e.g. /work) are light
+            // from the top, so the navbar is dark until it reaches the footer.
             if (!contentSection || !footerEl) {
-                navbar.classList.add('on-dark');
-                navbar.classList.remove('on-light');
+                const overFooter = footerEl
+                    && scrollPos >= footerEl.getBoundingClientRect().top + window.scrollY;
+                navbar.classList.toggle('on-dark', !!overFooter);
+                navbar.classList.toggle('on-light', !overFooter);
                 return;
             }
-            const scrollPos = window.scrollY + navbar.offsetHeight / 2;
             const contentTop = contentSection.getBoundingClientRect().top + window.scrollY;
             const footerTop = footerEl.getBoundingClientRect().top + window.scrollY;
 

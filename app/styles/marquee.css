@@ -31,11 +31,10 @@
     font-weight: 1000;
     line-height: 0.95;
     letter-spacing: -2px;
-    color: #ffffff;
+    color: var(--color-black);
     margin-bottom: 120px;
     margin-right: 50px;
     cursor: url("/assets/Cursor SVG/cursor-text.svg") 12 12, auto;
-    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
 
 .text-with {
@@ -43,7 +42,6 @@
     font-style: italic;
     font-weight: 400;
     position: relative;
-    color: rgba(255, 255, 255, 0.9);
 }
 
 .marquee-underline {
@@ -52,12 +50,11 @@
     right: 7.8rem;
     width: 100px;
     height: auto;
-    color: #ffffff;
+    color: var(--color-black);
     z-index: 6;
     transform: scaleX(0);
     opacity: 0;
     transform-origin: left;
-    filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.25));
 }
 
 /* ─── Blob + Decorative SVGs ─────────────────────────────────────────────── */
@@ -76,8 +73,6 @@
     width: 100%;
     height: 100%;
     z-index: 1;
-    opacity: 0.16;
-    filter: blur(40px);
 }
 
 .marquee-svg-container {
@@ -106,8 +101,7 @@
     left: 70%;
     width: 350px;
     height: auto;
-    color: rgba(255, 255, 255, 0.85);
-    filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.2));
+    color: var(--color-dark);
     transform: rotate(190deg) scaleX(-1);
     z-index: 1;
 }
@@ -196,19 +190,10 @@
 .marquee-item {
     width: 90%;
     height: 240px;
-    border-radius: 16px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.marquee-item:hover {
-    transform: scale(1.03);
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65);
 }
 
 /* Legacy theme attributes (kept for compatibility) */

@@ -45,7 +45,14 @@ export default function TransitionScribble() {
             gsap.set(svg, { scale: config.scale || 0.7, opacity: 1, x: 0, y: 0, rotation: 0 });
 
             const l = Math.ceil(path.getTotalLength() + 4000);
-            const color = TRANSITION_COLORS[Math.floor(Math.random() * TRANSITION_COLORS.length)];
+            // Random colour each sweep, never the same one twice in a row —
+            // remembered per tab so a reload also gets a fresh colour.
+            let last = -1;
+            try { last = Number(sessionStorage.getItem('arclume:sweep') ?? -1); } catch {}
+            let idx = Math.floor(Math.random() * TRANSITION_COLORS.length);
+            if (idx === last) idx = (idx + 1) % TRANSITION_COLORS.length;
+            try { sessionStorage.setItem('arclume:sweep', String(idx)); } catch {}
+            const color = TRANSITION_COLORS[idx];
             svg.style.color = color;
 
             // Rendered as part of this component's JSX — never injected into
