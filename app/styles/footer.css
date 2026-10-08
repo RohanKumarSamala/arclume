@@ -213,6 +213,7 @@
     position: relative;
     z-index: 2;
     cursor: url("/assets/Cursor SVG/cursor-pointer.svg") 12 12, pointer;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
 }
 
 .credits-box {

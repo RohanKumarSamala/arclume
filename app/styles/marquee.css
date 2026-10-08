@@ -194,6 +194,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1.5px solid var(--ink);
 }
 
 /* Legacy theme attributes (kept for compatibility) */

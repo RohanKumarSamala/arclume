@@ -62,7 +62,7 @@
 .work-hero__title span.highlight {
     position: relative;
     display: inline-block;
-    color: var(--color-maroon);
+    color: var(--accent);
 }
 
 .work-hero__subtitle {
@@ -550,7 +550,7 @@
 }
 
 .work-cta-btn {
-    background: var(--color-pink);
+    background: var(--accent);
     color: var(--color-black);
     padding: 16px 36px;
     border-radius: 50px;
@@ -564,9 +564,9 @@
 }
 
 .work-cta-btn:hover {
-    background: var(--color-lightgreen);
+    background: #ffffff;
     transform: scale(1.05) rotate(-1deg);
-    box-shadow: 0 12px 30px rgba(230, 250, 185, 0.3);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
 }
 
 
@@ -578,6 +578,7 @@
     position: relative;
     aspect-ratio: 16 / 10;
     overflow: hidden;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .modal-banner {
@@ -703,13 +704,13 @@
     box-shadow: none;
 }
 
-.badge-green { background: var(--color-green); color: #ffffff; }
-.badge-lightblue { background: var(--color-lightblue); color: var(--color-black); }
-.badge-darkblue { background: var(--color-darkblue); color: #ffffff; }
-.badge-lightgreen { background: var(--color-lightgreen); color: var(--color-black); }
-.badge-orange { background: var(--color-orange); color: var(--color-black); }
-.project-card__badge.badge-maroon { background: var(--color-maroon); color: #ffffff; }
-.project-card__badge.badge-pink { background: var(--color-pink); color: var(--color-black); }
+.badge-green,
+.badge-darkblue,
+.project-card__badge.badge-maroon { background: var(--ink); color: #ffffff; }
+.badge-lightblue,
+.badge-lightgreen,
+.project-card__badge.badge-pink { background: #ffffff; color: var(--color-black); }
+.badge-orange { background: var(--accent); color: var(--color-black); }
 
 .project-card__impact-tag {
     position: absolute;
@@ -819,7 +820,8 @@
 }
 
 .section-tag--blue {
-    background: var(--color-lightblue) !important;
+    background: #ffffff !important;
+    box-shadow: inset 0 0 0 1.5px var(--ink);
 }
 
 .filter-btn {

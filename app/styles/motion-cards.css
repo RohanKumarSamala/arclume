@@ -207,16 +207,13 @@
     white-space: nowrap;
 }
 
-.motion-card__card-name--pink {
-    background-color: #efbbd8;
-}
-
-.motion-card__card-name--orange {
-    background-color: #f4825c;
-}
-
-.motion-card__card-name--red {
-    background-color: #dcec9d;
+/* Name tags: one paper label with an ink outline, whatever `pillColor` says */
+.motion-card__card-name--pink,
+.motion-card__card-name--orange,
+.motion-card__card-name--red,
+.motion-card__card-name--blue {
+    background-color: #ffffff;
+    border: 1.5px solid var(--ink);
 }
 
 .motion-card__card-name--blue {

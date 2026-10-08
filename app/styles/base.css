@@ -13,14 +13,27 @@
 
 /* ─── Design Tokens ─────────────────────────────────────────────────────────── */
 :root {
-    --color-green: #29725f;
-    --color-lightblue: #82a0ff;
-    --color-darkblue: #4b69f0;
-    --color-lightgreen: #e6fab9;
-    --color-orange: #f5693c;
-    --color-maroon: #a0325a;
-    --color-pink: #f0befa;
-    --bg-color: #f0ebe6;
+    /* ── Palette: ink on paper, with one accent ──────────────────────────────
+       The whole site is drawn from these five. To change the accent, change
+       --accent and nothing else. */
+    --ink: #161616;
+    --ink-soft: #2b2a28;
+    --paper: #f0ebe6;
+    --paper-deep: #e2dad0;
+    --paper-light: #fbf9f6;
+    --accent: #f5693c;
+
+    /* Legacy names used across the stylesheets, mapped onto the palette.
+       (They used to be seven different brand colours.) */
+    --color-green: var(--ink);
+    --color-darkblue: var(--ink);
+    --color-maroon: var(--ink-soft);
+    --color-lightblue: var(--paper-light);
+    --color-lightgreen: var(--paper-deep);
+    --color-pink: var(--paper-deep);
+    --color-orange: var(--accent);
+
+    --bg-color: var(--paper);
     --color-white: #ffffff;
     --color-black: #000000;
     --color-dark: #1a1a1a;
@@ -36,7 +49,7 @@
 }
 
 ::selection {
-    background-color: var(--color-pink);
+    background-color: var(--accent);
     color: var(--color-black);
 }
 

@@ -6,11 +6,9 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ANIMATION_CONFIG } from '@/lib/data';
 
-const TRANSITION_COLORS = [
-    'var(--color-green)', 'var(--color-lightblue)', 'var(--color-darkblue)',
-    'var(--color-lightgreen)', 'var(--color-orange)', 'var(--color-maroon)', 'var(--color-pink)',
-];
-const LIGHT_COLORS = ['var(--color-lightblue)', 'var(--color-lightgreen)', 'var(--color-pink)'];
+// Sweep colours, all from the site palette (ink / accent / deep paper).
+const TRANSITION_COLORS = ['var(--ink)', 'var(--accent)', 'var(--paper-deep)'];
+const LIGHT_COLORS = ['var(--accent)', 'var(--paper-deep)'];
 
 // Routes that should not get the intro sweep.
 const NO_INTRO = ['/admin'];
